@@ -1,11 +1,15 @@
 class Board:
     def __init__(self):
-        self.field = [['_','_','_']]
+        self.field = [['_','_','_']] * 3
 
     def printField(self):
-        for i in self.field:
-            print()
+        f = Board()
+        print('    0 ', '  1 ', '  2')
+        for i in range(3):
+            print(str(i), end=' ')
+            print(f.field[i])
 
-f = Board()
-for i in f.field:
-    print(f.field)
+arg = Board()
+arg.printField()
+
+
