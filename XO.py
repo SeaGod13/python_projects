@@ -9,7 +9,7 @@ class Board:
             for j in range(3):
                 print(self.field[i][j], end = ' ')
             print()
-arg = Board()
+arg = Board() # test
 arg.printField()
 print()
 arg.field[1][0] = 'X'
