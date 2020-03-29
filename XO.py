@@ -1,6 +1,8 @@
 class Board:
     def __init__(self):
-        self.field = [['_','_','_']] * 3
+        #self.field = [['_','_','_']]
+        self.size = 3
+        self.field = [[“_” * self.size for i in range(self.size)]
 
     def printField(self):
         print('  0', '1', '2')
