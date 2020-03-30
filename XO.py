@@ -12,14 +12,16 @@ class Board:
             print()
 
     def win_check(self,player):
-        win = ''
         flag = True
         for i in range(self.size-1):
             for j in range(self.size-1):
-                if arg.field[i][j] != arg.field[i + 1][j + 1]:  # 00-22
+                if arg.field[i][j] != arg.field[i + 1][j + 1]:
                     flag = False
-                if arg.field[i][j] != arg.field[i + 1][j + 1]:  # 00-22
+                elif arg.field[i][j] != arg.field[i][j + 1]:
                     flag = False
+                elif arg.field[j][i] != arg.field[j][i+1]:
+                    flag = False
+        return flag
 
     # def win_check(self, player):
     #     win = ''
@@ -48,11 +50,11 @@ class Board:
 arg = Board()
 arg.printField()
 print()
-winner = ''
+winner = False
 lblx = 'X'
 lblo = 'O'
 count = 0
-while winner == '' and count < 10:
+while not winner and count < 10:
     count += 1
     if count % 2 != 0:
         move = 'Крестики, '
@@ -79,16 +81,9 @@ while winner == '' and count < 10:
     print()
     if count > 4:
         winner = arg.win_check(lbl)
-    if winner == 'X':
+    if lbl == 'X' and winner:
         print('Победа крестиков')
-    elif winner == 'O':
+    elif lbl == 'O' and winner:
         print('Победа ноликов')
-        # if (arg.field[0][0] == arg.field[1][1] and arg.field[1][1] == arg.field[2][2]):
-        #     if arg.field[0][0] == lblx:
-        #         print('Победа крестиков')
-        #         win_X = True
-        #     elif arg.field[0][0] == lblo:
-        #         print('Победа ноликов')
-        #         win_O = True
 
 
