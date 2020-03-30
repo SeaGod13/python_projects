@@ -8,26 +8,32 @@ class Board:
         for i in range(3):
             print(i, end=' ')
             for j in range(3):
-                print(self.field[i][j], end = ' ')
+                print(self.field[i][j], end=' ')
             print()
 
-    def win_check(self, player):
-        i = 0
-        game_over == False
-        win_count = 0
-        while i < self.size - 1:
-            if arg.field[i][i] == arg.field[i+1][i+1]: # 00-22
-                win_count += 1
-            if win_count == self.size - 1:
-                game_over = True
-            i += 1
-        if player == 'X' and game_over == True:
-            win_X = True
-        elif player == 'O' and game_over == True:
-            win_O = True
+    def win_check(self,player):
+        win = ''
+        flag = True
+        for i in range(self.size-1):
+            for j in range(self.size-1):
+                if arg.field[i][j] != arg.field[i + 1][j + 1]:  # 00-22
+                    flag = False
+                if arg.field[i][j] != arg.field[i + 1][j + 1]:  # 00-22
+                    flag = False
 
-
-
+    # def win_check(self, player):
+    #     win = ''
+    #     i = 0
+    #     win_count = 0
+    #     while i < self.size - 1:
+    #         if arg.field[i][i] == arg.field[i+1][i+1]: # 00-22
+    #             win_count += 1
+    #         if player == 'X' and win_count == self.size - 1:
+    #             win = 'X'
+    #         elif player == 'O' and win_count == self.size - 1:
+    #             win = 'O'
+    #         i += 1
+    #     return win
 
         # if (arg.field[0][0] == arg.field[1][1] and arg.field[1][1] == arg.field[2][2]): # 00 - 22
         #     game_over = True
@@ -42,14 +48,12 @@ class Board:
 arg = Board()
 arg.printField()
 print()
-win_X = False
-win_O = False
+winner = ''
 lblx = 'X'
 lblo = 'O'
 count = 0
-while win_X == False and win_O == False and count < 10:
+while winner == '' and count < 10:
     count += 1
-
     if count % 2 != 0:
         move = 'Крестики, '
         lbl = lblx
@@ -73,11 +77,11 @@ while win_X == False and win_O == False and count < 10:
         arg.field[y][x] = lbl
     arg.printField()
     print()
-    if count > 0:
-        arg.win_check(lbl)
-    if win_X:
+    if count > 4:
+        winner = arg.win_check(lbl)
+    if winner == 'X':
         print('Победа крестиков')
-    elif win_O:
+    elif winner == 'O':
         print('Победа ноликов')
         # if (arg.field[0][0] == arg.field[1][1] and arg.field[1][1] == arg.field[2][2]):
         #     if arg.field[0][0] == lblx:
