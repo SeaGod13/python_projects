@@ -4,10 +4,13 @@ class Board:
         self.field = [['_'] * self.size for i in range(self.size)]
 
     def printField(self):
-        print('  0', '1', '2')
-        for i in range(3):
+        print('  ', end='')
+        for i in range(self.size):
             print(i, end=' ')
-            for j in range(3):
+        print()
+        for i in range(self.size):
+            print(i, end=' ')
+            for j in range(self.size):
                 print(self.field[i][j], end=' ')
             print()
 
