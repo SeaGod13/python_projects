@@ -104,4 +104,5 @@ print()
 
 p1_ob.fillField()
 p1_ob.printField()
+p1_fb.printField()
 # print(cls)
