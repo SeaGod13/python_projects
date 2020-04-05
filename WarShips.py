@@ -53,10 +53,9 @@ class Map:
                 print('введите смещение в ' + str(n-1) + ' кл. по любой из коодинат для корабля №' + str(cnt))
                 delta_x = int(input())
                 delta_y = int(input())
-                while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][
-                    x + delta_x] == 'O' \
-                        or delta_x < -(n-1) or delta_y < -(n-1) or delta_x > (n-1) or delta_y > (n-1) or (
-                        delta_x != 0 and delta_y != 0):
+                while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][x + delta_x] == 'O' \
+                        or delta_x < -(n-1) or delta_y < -(n-1) or delta_x > (n-1) or delta_y > (n-1) \
+                        or (delta_x != 0 and delta_y != 0):
                     print('введите правильное смещение')
                     delta_x = int(input())
                     delta_y = int(input())
@@ -79,10 +78,9 @@ class Map:
                 print('введите смещение в ' + str(n+1) + ' кл. по любой из коодинат для корабля №' + str(cnt))
                 delta_x = int(input())
                 delta_y = int(input())
-                while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][
-                    x + delta_x] == 'O' \
-                        or delta_x < -(n+1) or delta_y < -(n+1) or delta_x > (n+1) or delta_y > (n+1) or (
-                        delta_x != 0 and delta_y != 0):
+                while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][x + delta_x] == 'O' \
+                        or delta_x < -(n+1) or delta_y < -(n+1) or delta_x > (n+1) or delta_y > (n+1) \
+                        or (delta_x != 0 and delta_y != 0):
                     print('введите правильное смещение')
                     delta_x = int(input())
                     delta_y = int(input())
@@ -100,7 +98,14 @@ class Map:
 
     # метод определения победителя
     def winCheck(self):
+        winCnt = 0
         win = False
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.field[y][x] == '*':
+                    winCnt += 1
+        if winCnt == 10:
+            win = True
         return win
 
 cls = "\n" * 20  # переменная для очистки поля
@@ -135,16 +140,73 @@ print(cls)
 
 # активная фаза игры
 trn = 0
-win = False
-while trn < 71 or win:
+trnCnt = 0
+finish = False
+while not finish:
     trn += 1
+    trnCnt += 1
+    miss = False
     if trn % 2 != 0:
         p1_ob.printField()
         p1_fb.printField()
-        print('первый игрок введите координаты стрельбы')
+        while not miss:
+            print('первый игрок введите координаты стрельбы')
+            x = int(input())
+            y = int(input())
+            if p2_ob.field[y][x] == '.':
+                print('вы стреляли по этому полю, еще раз введите координаты стрельбы')
+                x = int(input())
+                y = int(input())
+            elif p2_ob.field[y][x] == '_':
+                p2_ob.field[y][x] = '.'
+                p1_fb.field[y][x] = '.'
+                print('вы промахнулись')
+                miss = True
+            elif p2_ob.field[y][x] == 'O':
+                p2_ob.field[y][x] = '*'
+                p1_fb.field[y][x] = '*'
+                if p2_ob.field[y+1][x] == 'O' or p2_ob.field[y-1][x] == 'O' or p2_ob.field[y][x+1] == 'O' \
+                        or p2_ob.field[y][x] == 'O':
+                    print('ранил, стреляйте дальше')
+                else:
+                    print('убили, ищите новую цель')
+                trnCnt += 1
+            p1_ob.printField()
+            p1_fb.printField()
+        if trnCnt > 9:
+            finish = p2_ob.winCheck()
     else:
         p2_ob.printField()
         p2_fb.printField()
-        print('второй игрок введите координаты стрельбы')
-    x = int(input())
-    y = int(input())
+        while not miss:
+            print('второй игрок введите координаты стрельбы')
+            x = int(input())
+            y = int(input())
+            if p1_ob.field[y][x] == '.':
+                print('вы стреляли по этому полю, еще раз введите координаты стрельбы')
+                x = int(input())
+                y = int(input())
+            elif p1_ob.field[y][x] == '_':
+                p1_ob.field[y][x] = '.'
+                p2_fb.field[y][x] = '.'
+                print('вы промахнулись')
+                miss = True
+            elif p1_ob.field[y][x] == 'O':
+                p1_ob.field[y][x] = '*'
+                p2_fb.field[y][x] = '*'
+                if p1_ob.field[y + 1][x] == 'O' or p1_ob.field[y - 1][x] == 'O' or p1_ob.field[y][x + 1] == 'O' \
+                        or p1_ob.field[y][x] == 'O':
+                    print('ранил, стреляйте дальше')
+                else:
+                    print('убили, ищите новую цель')
+                trnCnt += 1
+            p2_ob.printField()
+            p2_fb.printField()
+        if trnCnt > 9:
+            finish = p1_ob.winCheck()
+    time.sleep(3)
+    print(cls)
+if trn % 2 != 0:
+    print('победа первого игрока')
+else:
+    print('победа второго игрока')

@@ -5,7 +5,11 @@
 #     print()
 
 
+#
+# print('11111111111111111')
+# cl = "\n" * 100
+# print(cl)
 
-print('11111111111111111')
-cl = "\n" * 100
-print(cl)
+m = True
+while m:
+    print(1)
