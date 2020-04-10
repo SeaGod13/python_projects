@@ -7,6 +7,30 @@ class Map:
         self.ship1cnt = 3  # кол-во 1 палубных кораблей
         self.ship2cnt = 2  # кол-во 2 палубных кораблей
         self.ship3cnt = 1  # кол-во 3 палубных кораблей
+        self.ship1coord = ({'sh1':[]}) # координаты однопалубных кораблей
+        self.ship2coord = ({'sh2': []})  # координаты двухпалубных кораблей
+        self.ship3coord = ({'sh3': []})  # координаты трехпалубных кораблей
+
+    # метод проверки попадания
+    def hitCheck(self, x, y):
+        result = 0
+        data = self.ship1coord['sh1']  # проверка на попадание в однопалубный
+        for i in data:
+            if x == i['x'] and y == i['y']:
+                result = 2
+                i['mark'] = 1
+                break
+        data = self.ship2coord['sh2']  # проверка на попадание в двухпалубный
+        sumMark = 0
+        for i in data:
+            if x == i['x'] and y == i['y']:
+                i['mark'] = 1
+                result = 1
+            sumMark += i['mark']
+            if sumMark == 2:
+                result = 2
+                break
+        return result
 
     # метод печати поля
     def printField(self):
@@ -35,6 +59,8 @@ class Map:
                     x = int(input())
                     y = int(input())
                 self.field[y][x] = 'O'
+                new_item = ({'x': x, 'y': y, 'mark': 0}, ) # запись данных с координатами
+                self.ship1coord['sh1'] += list(new_item)
             self.printField()
             # расстановка двухпалубных кораблей
             cnt = 0
@@ -50,6 +76,8 @@ class Map:
                     x = int(input())
                     y = int(input())
                 self.field[y][x] = 'O'
+                new_item = ({'x': x, 'y': y, 'mark': 0},) # запись данных с координатами
+                self.ship2coord['sh2'] += list(new_item)
                 print('введите смещение в ' + str(n-1) + ' кл. по любой из коодинат для корабля №' + str(cnt))
                 delta_x = int(input())
                 delta_y = int(input())
@@ -60,36 +88,38 @@ class Map:
                     delta_x = int(input())
                     delta_y = int(input())
                 self.field[y + delta_y][x + delta_x] = 'O'
+                new_item = ({'x': x + delta_x, 'y': y + delta_y, 'mark': 0},)  # запись данных с координатами
+                self.ship2coord['sh2'] += list(new_item)
             self.printField()
-            # расстановка трехпалубных кораблей
-            cnt = 0
-            n = self.ship3cnt
-            print('расставьте один 3 палубный корабль')
-            while cnt < n:
-                cnt += 1
-                print('введите начальные координаты корабля №' + str(cnt))
-                x = int(input())
-                y = int(input())
-                while x >= self.size or y >= self.size or self.field[y][x] == 'O':
-                    print('введите правильные координаты')
-                    x = int(input())
-                    y = int(input())
-                self.field[y][x] = 'O'
-                print('введите смещение в ' + str(n+1) + ' кл. по любой из коодинат для корабля №' + str(cnt))
-                delta_x = int(input())
-                delta_y = int(input())
-                while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][x + delta_x] == 'O' \
-                        or delta_x < -(n+1) or delta_y < -(n+1) or delta_x > (n+1) or delta_y > (n+1) \
-                        or (delta_x != 0 and delta_y != 0):
-                    print('введите правильное смещение')
-                    delta_x = int(input())
-                    delta_y = int(input())
-                if delta_x == 0 and delta_y != 0:
-                    self.field[y + delta_y - 1][x + delta_x] = 'O'
-                elif delta_x != 0 and delta_y == 0:
-                    self.field[y + delta_y][x + delta_x - 1] = 'O'
-                self.field[y + delta_y][x + delta_x] = 'O'
-            self.printField()
+            # # расстановка трехпалубных кораблей
+            # cnt = 0
+            # n = self.ship3cnt
+            # print('расставьте один 3 палубный корабль')
+            # while cnt < n:
+            #     cnt += 1
+            #     print('введите начальные координаты корабля №' + str(cnt))
+            #     x = int(input())
+            #     y = int(input())
+            #     while x >= self.size or y >= self.size or self.field[y][x] == 'O':
+            #         print('введите правильные координаты')
+            #         x = int(input())
+            #         y = int(input())
+            #     self.field[y][x] = 'O'
+            #     print('введите смещение в ' + str(n+1) + ' кл. по любой из коодинат для корабля №' + str(cnt))
+            #     delta_x = int(input())
+            #     delta_y = int(input())
+            #     while x + delta_x >= self.size or y + delta_y >= self.size or self.field[y + delta_y][x + delta_x] == 'O' \
+            #             or delta_x < -(n+1) or delta_y < -(n+1) or delta_x > (n+1) or delta_y > (n+1) \
+            #             or (delta_x != 0 and delta_y != 0):
+            #         print('введите правильное смещение')
+            #         delta_x = int(input())
+            #         delta_y = int(input())
+            #     if delta_x == 0 and delta_y != 0:
+            #         self.field[y + delta_y - 1][x + delta_x] = 'O'
+            #     elif delta_x != 0 and delta_y == 0:
+            #         self.field[y + delta_y][x + delta_x - 1] = 'O'
+            #     self.field[y + delta_y][x + delta_x] = 'O'
+            # self.printField()
             print('все ли размещено корректно, введите y/n')
             answer = input()
             if answer == 'y' or answer == 'Y':
@@ -102,9 +132,9 @@ class Map:
         win = False
         for i in range(self.size):
             for j in range(self.size):
-                if self.field[y][x] == '*':
+                if self.field[j][i] == '*':
                     winCnt += 1
-        if winCnt == 10:
+        if winCnt == 1:
             win = True
         return win
 
@@ -140,11 +170,9 @@ print(cls)
 
 # активная фаза игры
 trn = 0
-trnCnt = 0
 finish = False
 while not finish:
     trn += 1
-    trnCnt += 1
     miss = False
     if trn % 2 != 0:
         p1_ob.printField()
@@ -165,16 +193,25 @@ while not finish:
             elif p2_ob.field[y][x] == 'O':
                 p2_ob.field[y][x] = '*'
                 p1_fb.field[y][x] = '*'
-                if p2_ob.field[y+1][x] == 'O' or p2_ob.field[y-1][x] == 'O' or p2_ob.field[y][x+1] == 'O' \
-                        or p2_ob.field[y][x] == 'O':
+                # finish = p1_fb.winCheck() # проверка на победу
+                # if finish:
+                #     break
+                res = p2_ob.hitCheck(x, y)
+                if res == 0:
+                    print('вы промахнулись')
+                    time.sleep(3)
+                elif res == 1:
                     print('ранил, стреляйте дальше')
-                else:
+                elif res == 2:
                     print('убили, ищите новую цель')
-                trnCnt += 1
+
+                    # if p2_ob.field[y+1][x] == 'O' or p2_ob.field[y-1][x] == 'O' or p2_ob.field[y][x+1] == 'O' \
+                #         or p2_ob.field[y][x] == 'O':
+                #     print('ранил, стреляйте дальше')
+                # else:
+                #     print('убили, ищите новую цель')
             p1_ob.printField()
             p1_fb.printField()
-        if trnCnt > 9:
-            finish = p2_ob.winCheck()
     else:
         p2_ob.printField()
         p2_fb.printField()
@@ -195,15 +232,13 @@ while not finish:
                 p1_ob.field[y][x] = '*'
                 p2_fb.field[y][x] = '*'
                 if p1_ob.field[y + 1][x] == 'O' or p1_ob.field[y - 1][x] == 'O' or p1_ob.field[y][x + 1] == 'O' \
-                        or p1_ob.field[y][x] == 'O':
+                        or p1_ob.field[y][x - 1] == 'O':
                     print('ранил, стреляйте дальше')
                 else:
                     print('убили, ищите новую цель')
-                trnCnt += 1
             p2_ob.printField()
             p2_fb.printField()
-        if trnCnt > 9:
-            finish = p1_ob.winCheck()
+        finish = p2_fb.winCheck()
     time.sleep(3)
     print(cls)
 if trn % 2 != 0:
