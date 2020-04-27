@@ -10,6 +10,18 @@
 # cl = "\n" * 100
 # print(cl)
 
-m = True
-while m:
-    print(1)
+print('все ли размещено корректно, введите y/n') #проверка на правильность размещения, если не верно, то полный сброс
+answer = ''
+while answer != 'y' and answer != 'Y' and answer != 'n' and answer != 'N':
+    answer = input()
+    if answer == 'y' or answer == 'Y':
+        ready = True
+    elif answer == 'n' or answer == 'N':
+        print(answer)
+        # self.field = [['_'] * self.size for i in range(self.size)]
+        # self.ship1coord = ({'sh1': []})
+        # self.ship2coord = ({'sh2': []})
+        # self.ship3coord = ({'sh3': []})
+    else:
+        print('введите правильный ответ: (y/n)')
+
